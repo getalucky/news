@@ -8,6 +8,7 @@
       <van-form @submit="onSubmit">
         <van-field
           v-model="form.username"
+          class="inp"
           name="用户名"
           placeholder="用户名"
           :rules="[{ required: true, message: '请填写用户名' }]"
@@ -20,8 +21,8 @@
           :rules="[{ required: true, message: '请填写密码' }]"
         />
         <div>
-          <van-button round block type="info" native-type="submit">提交</van-button>
-          <router-link to="/register" class="registere">注册</router-link>
+          <van-button round block type="info" native-type="submit">登录</van-button>
+          <router-link to="/register" class="btnt">注册</router-link>
         </div>
       </van-form>
     </div>
@@ -46,7 +47,6 @@ export default {
         method: "post",
         data: this.form
       }).then(res => {
-        console.log(res);
         if (res.data.statusCode == 200) {
           this.$toast(res.data.message);
         }
@@ -56,7 +56,7 @@ export default {
 };
 </script>
 
-<style lang='less'>
+<style  lang='less'>
 @import url("//at.alicdn.com/t/font_1426139_jm7n2373nlh.css");
 .w {
   width: 22.5rem;
@@ -103,7 +103,7 @@ body {
     padding: 0;
     background: #f2f2f2;
   }
-  .registere {
+  .btnt {
     display: block;
     margin-top: 0.347222rem;
     text-align: center;
