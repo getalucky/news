@@ -28,7 +28,7 @@
         />
         <div>
           <van-button round block type="info" native-type="submit">注册</van-button>
-          <router-link to="/login" class="btnt">登录</router-link>
+          <router-link to="/btnt" class="btnt">登录</router-link>
         </div>
       </van-form>
     </div>
@@ -65,4 +65,64 @@ export default {
 </script>
 
 <style lang="less">
+@import url("//at.alicdn.com/t/font_1426139_jm7n2373nlh.css");
+.w {
+  width: 22.5rem;
+  margin: auto;
+  // background: blue;
+}
+div.w {
+  position: relative;
+}
+body {
+  background: #f2f2f2;
+}
+.logo {
+  display: flex;
+  justify-content: center;
+  padding-top: 4.0625rem;
+  font-size: 7.875rem;
+  line-height: 1;
+  color: #d81e06;
+}
+
+.login {
+  display: flex;
+  // margin-top: 5.866667rem;
+  flex-direction: column;
+  align-items: center;
+  button {
+    margin-top: 2.8125rem;
+    width: 19.6875rem;
+    height: 3.125rem;
+    border-radius: 1.5625rem;
+    background: #cc3300;
+    font-size: 1.125rem;
+    color: #fff;
+  }
+  input {
+    margin-bottom: 0.625rem;
+    width: 19.6875rem;
+    height: 3.125rem;
+    font-size: 1.125rem;
+    border-bottom: 0.0625rem solid #333;
+  }
+  .van-cell {
+    padding: 0;
+    background: #f2f2f2;
+  }
+  .btnt {
+    display: block;
+    margin-top: 0.347222rem;
+    text-align: center;
+    line-height: 3.125rem;
+    height: 3.125rem;
+  }
+}
+.frok {
+  position: absolute;
+  top: 1.5625rem;
+  left: 1.5625rem;
+  font-size: 1.5625rem;
+}
 </style>
