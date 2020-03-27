@@ -16,6 +16,23 @@ Vue.prototype.$axios = axios;
 Vue.use(Vant);
 // 提示框
 Vue.use(Toast);
+// 注册全局前置守卫
+router.beforeEach((to, from, next) => {
+  if (to.path == "/personal") {
+    const local = JSON.parse(localStorage.getItem('userInfo')) || [];
+    if (local.length != 0) {
+      next();
+    } else {
+      next('/login');
+    }
+
+  } else {
+    next();
+
+  }
+
+})
+
 
 Vue.config.productionTip = false
 

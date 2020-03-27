@@ -28,7 +28,7 @@
         />
         <div>
           <van-button round block type="info" native-type="submit">注册</van-button>
-          <router-link to="/btnt" class="btnt">登录</router-link>
+          <router-link to="/login" class="btnt">登录</router-link>
         </div>
       </van-form>
     </div>
@@ -67,15 +67,12 @@ export default {
 <style lang="less">
 @import url("//at.alicdn.com/t/font_1426139_jm7n2373nlh.css");
 .w {
-  width: 22.5rem;
+  width: 25rem;
   margin: auto;
   // background: blue;
 }
 div.w {
   position: relative;
-}
-body {
-  background: #f2f2f2;
 }
 .logo {
   display: flex;
@@ -109,7 +106,6 @@ body {
   }
   .van-cell {
     padding: 0;
-    background: #f2f2f2;
   }
   .btnt {
     display: block;
