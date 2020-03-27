@@ -14,6 +14,10 @@ const routes = [{
   {
     path: '/personal',
     component: () => import('@/views/Personal')
+  },
+  {
+    path: '/editprofile',
+    component: () => import('@/views/EditProfile')
   }
 ]
 

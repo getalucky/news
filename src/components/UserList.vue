@@ -16,7 +16,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import url("//at.alicdn.com/t/font_1426139_jm7n2373nlh.css");
 a {
   display: flex;
   justify-content: space-between;

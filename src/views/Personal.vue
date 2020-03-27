@@ -21,7 +21,7 @@
           <div class="time">{{moment(this.userInfo.create_date).format('YYYY-MM-DD')}}</div>
         </div>
         <!-- 右箭头 -->
-        <router-link to="#">
+        <router-link to="editprofile">
           <i class="iconfont iconjiantou1"></i>
         </router-link>
       </div>
