@@ -5,7 +5,11 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 import axios from 'axios';
 import {
-  Toast
+  Toast,
+  Uploader,
+  Dialog,
+  Field,
+  ActionSheet
 } from 'vant';
 
 
@@ -16,6 +20,14 @@ Vue.prototype.$axios = axios;
 Vue.use(Vant);
 // 提示框
 Vue.use(Toast);
+// 上传图片组件
+Vue.use(Uploader);
+// 注册模态框
+Vue.use(Dialog);
+// 注册输入框
+Vue.use(Field);
+// 注册上拉菜单
+Vue.use(ActionSheet);
 // 注册全局前置守卫
 router.beforeEach((to, from, next) => {
   if (to.path == "/personal") {

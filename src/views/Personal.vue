@@ -1,11 +1,7 @@
 <template>
   <div class="w">
     <!-- 个人中心标题 -->
-    <div class="personal">
-      <i class="iconfont iconjiantou2"></i>
-      <h1>个人中心</h1>
-      <i class="iconfont iconshouye"></i>
-    </div>
+    <titleBar titleName="个人中心" show="1"></titleBar>
     <!-- 个人信息部分 -->
     <div class="header">
       <!-- 头像 -->
@@ -16,7 +12,7 @@
         <!-- 用户信息 -->
         <div class="userContent">
           <span class="iconfont iconxingbienan blueIcon" v-if="this.userInfo.gender == 1"></span>
-          <span class="iconfont iconxingbienv pinkIcon" v-if="this.userInfo.gender == 2"></span>
+          <span class="iconfont iconxingbienv pinkIcon" v-if="this.userInfo.gender == 0"></span>
           <span>{{this.userInfo.nickname}}</span>
           <div class="time">{{moment(this.userInfo.create_date).format('YYYY-MM-DD')}}</div>
         </div>
@@ -41,6 +37,7 @@
 
 <script>
 import userlist from "@/components/UserList";
+import titleBar from "@/components/Title";
 // 引入第三方的日期格式处理的工具库
 import moment from "moment";
 // vant
@@ -59,14 +56,15 @@ export default {
     };
   },
   components: {
-    userlist
+    userlist,
+    titleBar
   },
   mounted: function() {
     const localStr = JSON.parse(localStorage.getItem("userInfo"));
     let myUrl = "/user/" + localStr.user.id;
     this.$axios({
       headers: { Authorization: localStr.token },
-      url: this.$axios.defaults.baseURL + myUrl
+      url: myUrl
     }).then(res => {
       const { data } = res.data;
       this.userInfo = data;
@@ -94,21 +92,7 @@ export default {
 .w {
   width: 25rem;
   margin: auto;
-  .personal {
-    display: flex;
-    justify-content: space-around;
-    line-height: 3.472222rem;
-    border-bottom: 1px solid #e4e4e4;
 
-    h1 {
-      font-weight: normal;
-      font-size: 1.25rem;
-      margin: 0 2.083333rem;
-    }
-    i {
-      font-size: 1.527778rem;
-    }
-  }
   .header {
     display: flex;
     justify-content: space-between;
@@ -125,8 +109,7 @@ export default {
       // background: blue;
       img {
         object-fit: contain;
-        width: 5rem;
-        height: 5rem;
+        width: 100%;
       }
     }
     > div {
