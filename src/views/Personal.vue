@@ -29,6 +29,7 @@
         :key="index"
         :label="item.label"
         :note="item.note"
+        :path="item.path"
       ></userlist>
       <userlist label="退出" @click.native="exit" />
     </div>
@@ -46,9 +47,9 @@ export default {
   data: function() {
     return {
       selectCard: [
-        { label: "我的关注", note: "关注的用户" },
-        { label: "我的跟帖", note: "跟帖/回复" },
-        { label: "我的收藏", note: "文章/视频" }
+        { label: "我的关注", note: "关注的用户", path: "/follow" },
+        { label: "我的跟帖", note: "跟帖/回复", path: "/comments" },
+        { label: "我的收藏", note: "文章/视频", path: "/collect" }
         // { label: "设置", note: "" }
       ],
       userInfo: {},

@@ -1,5 +1,5 @@
 <template>
-  <router-link to="#">
+  <router-link :to="this.path || '#'">
     <span>{{label}}</span>
     <span>
       {{note}}
@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  props: ["label", "note"],
+  props: ["label", "note", "path"],
   mounted: function() {}
 };
 </script>
