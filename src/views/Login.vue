@@ -61,7 +61,6 @@ export default {
 .w {
   width: 25rem;
   margin: auto;
-  // background: blue;
 }
 div.w {
   position: relative;

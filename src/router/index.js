@@ -1,9 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+// 引入首页面的组件
+import index from '@/views/Index'
 
 Vue.use(VueRouter)
 
 const routes = [
+  // 首页
+  {
+    path: '/',
+    component: index
+  },
   // 登录页
   {
     path: '/login',

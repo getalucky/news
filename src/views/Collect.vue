@@ -4,37 +4,7 @@
     <!-- 收藏列表 -->
     <ul>
       <li>
-        <router-link to="#">
-          <!-- 只有一张图片的类型 -->
-          <div
-            class="colectList1"
-            v-for="(item,index) in userCollect"
-            :key="index"
-            v-if="item.cover.length == 1"
-          >
-            <div>
-              <h3>{{item.title}}</h3>
-              <p>
-                <span>{{item.user.nickname}}</span>
-                <span>{{item.comments.length}}</span>
-              </p>
-            </div>
-            <img :src="$axios.defaults.baseURL + item.cover[0].url" alt />
-          </div>
-          <!-- 有三张图片的类型 -->
-          <div class="colectList2" v-else>
-            <h3>标题</h3>
-            <div>
-              <img src="../assets/logo.png" alt />
-              <img src="../assets/logo.png" alt />
-              <img src="../assets/logo.png" alt />
-            </div>
-            <p>
-              <span>火星时报</span>
-              <span>50跟帖</span>
-            </p>
-          </div>
-        </router-link>
+        <newslist :userCollect="userCollect"></newslist>
       </li>
     </ul>
   </div>
@@ -42,6 +12,7 @@
 
 <script>
 import titleBar from "@/components/Title";
+import newslist from "@/components/NewsList";
 
 export default {
   data: function() {
@@ -50,7 +21,8 @@ export default {
     };
   },
   components: {
-    titleBar
+    titleBar,
+    newslist
   },
   mounted: function() {
     const localStr = JSON.parse(localStorage.getItem("userInfo"));

@@ -3,7 +3,7 @@
     <i class="iconfont iconjiantou2" @click="$router.back()"></i>
     <h1>{{titleName}}</h1>
     <!-- 判断是否显示返回主页 -->
-    <i class="iconfont iconshouye" v-if="show"></i>
+    <i class="iconfont iconshouye" v-if="show" @click="$router.replace('/')"></i>
     <i v-else class="iconfont iconshouye notShow"></i>
   </div>
 </template>
@@ -15,6 +15,8 @@ export default {
 </script>
 
 <style lang='less' scoped>
+@import url("//at.alicdn.com/t/font_1426139_jm7n2373nlh.css");
+
 .personal {
   display: flex;
   justify-content: space-around;
