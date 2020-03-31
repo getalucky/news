@@ -28,21 +28,27 @@ Vue.use(Dialog);
 Vue.use(Field);
 // 注册上拉菜单
 Vue.use(ActionSheet);
+// 添加响应拦截器
+axios.interceptors.response.use(function (response) {
+  // 对响应数据做点什么
+  return response;
+}, function (error) {
+  // 对响应错误做点什么
+  Toast.fail(error.response.data.message);
+  return Promise.reject(error);
+});
 // 注册全局前置守卫
 router.beforeEach((to, from, next) => {
-  if (to.path == "/personal") {
+  if (to.meta.intercept) {
     const local = JSON.parse(localStorage.getItem('userInfo')) || [];
     if (local.length != 0) {
       next();
     } else {
       next('/login');
     }
-
   } else {
     next();
-
   }
-
 })
 
 

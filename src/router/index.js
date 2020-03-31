@@ -24,27 +24,42 @@ const routes = [
   // 个人中心页
   {
     path: '/personal',
-    component: () => import('@/views/Personal')
+    component: () => import('@/views/Personal'),
+    meta: {
+      intercept: true
+    }
   },
   // 编辑资料页
   {
     path: '/editprofile',
-    component: () => import('@/views/EditProfile')
+    component: () => import('@/views/EditProfile'),
+    meta: {
+      intercept: true
+    }
   },
   // 我的关注页
   {
     path: '/follow',
-    component: () => import('@/views/Follow')
+    component: () => import('@/views/Follow'),
+    meta: {
+      intercept: true
+    }
   },
   // 我的跟帖
   {
     path: '/comments',
-    component: () => import('@/views/Comments')
+    component: () => import('@/views/Comments'),
+    meta: {
+      intercept: true
+    }
   },
   // 我的收藏
   {
     path: '/collect',
-    component: () => import('@/views/Collect')
+    component: () => import('@/views/Collect'),
+    meta: {
+      intercept: true
+    }
   }
 ]
 
