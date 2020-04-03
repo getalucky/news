@@ -1,45 +1,48 @@
 <template>
   <router-link to="#">
-    <!-- 只有一张图片的类型 -->
-    <div
-      class="colectList1"
-      v-for="(item,index) in userCollect"
-      :key="index"
-      v-if="item.cover.length == 1 && item.type == 1"
-    >
-      <div>
+    <div v-for="(item,index) in userCollect" :key="index">
+      <!-- 只有一张图片的类型 -->
+      <div
+        class="colectList1"
+        v-if="item.cover.length > 0 && item.cover.length < 3 && item.type == 1"
+      >
+        <div>
+          <h3>{{item.title}}</h3>
+          <p>
+            <span>{{item.user.nickname}}</span>
+            <span>{{item.comment_length}}跟帖</span>
+          </p>
+        </div>
+        <img :src="$axios.defaults.baseURL + item.cover[0].url" alt />
+      </div>
+      <!-- 有三张图片的类型 -->
+      <div class="colectList2" v-else-if="item.cover.length >= 3 && item.type == 1">
         <h3>{{item.title}}</h3>
+        <div>
+          <img
+            :src="$axios.defaults.baseURL + item1.url"
+            alt
+            v-for="(item1,index1) in item.cover"
+            :key="index1"
+          />
+        </div>
         <p>
           <span>{{item.user.nickname}}</span>
-          <span>{{item.comments.length}}</span>
+          <span>{{item.comment_length}}跟帖</span>
         </p>
       </div>
-      <img :src="$axios.defaults.baseURL + item.cover[0].url" alt />
-    </div>
-    <!-- 有三张图片的类型 -->
-    <div class="colectList2" v-else-if="item.cover.length == 3 && item.type == 1">
-      <h3>标题</h3>
-      <div>
-        <img src="../assets/logo.png" alt />
-        <img src="../assets/logo.png" alt />
-        <img src="../assets/logo.png" alt />
+      <!-- 有视频的类型   -->
+      <div class="colectList3" v-else-if="item.type == 2">
+        <h3>{{item.title}}</h3>
+        <div class="voide">
+          <img :src="$axios.defaults.baseURL + item.cover[0].url" alt />
+          <span class="iconfont icon-icon_play"></span>
+        </div>
+        <p>
+          <span>{{item.user.nickname}}</span>
+          <span>{{item.comment_length}}跟帖</span>
+        </p>
       </div>
-      <p>
-        <span>火星时报</span>
-        <span>50跟帖</span>
-      </p>
-    </div>
-    <!-- 有视频的类型 -->
-    <div class="colectList3" v-else-if="item.type == 2">
-      <h3>标题</h3>
-      <div class="voide">
-        <img src="../assets/logo.png" alt />
-        <span class="iconfont icon-icon_play"></span>
-      </div>
-      <p>
-        <span>火星时报</span>
-        <span>50跟帖</span>
-      </p>
     </div>
   </router-link>
 </template>
@@ -47,9 +50,7 @@
 <script>
 export default {
   props: ["userCollect"],
-  mounted: function() {
-    console.log(this.userCollect);
-  }
+  mounted: function() {}
 };
 </script>
 
@@ -96,8 +97,9 @@ export default {
   div {
     display: flex;
     padding: 0.347222rem 0;
+    justify-content: space-between;
     img {
-      flex: 0 0 33%;
+      width: 32%;
       height: 5.208333rem;
       object-fit: cover;
     }
@@ -124,7 +126,6 @@ export default {
     height: 11.805556rem;
     margin: 0.833333rem auto;
     overflow: hidden;
-    background: skyblue;
     img {
       width: 23.611111rem;
       height: 11.805556rem;

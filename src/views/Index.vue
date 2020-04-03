@@ -12,9 +12,16 @@
     </header>
     <!-- 标签栏 -->
     <van-tabs v-model="active" sticky>
-      <van-tab v-for="(item,index) in tabList" :title="item" :key="index">
-        <newslist />
-      </van-tab>
+      <van-tab v-for="(item,index) in tabList" :title="item.name" :key="index"></van-tab>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        :immediate-check="false"
+      >
+        <newslist :userCollect="list" />
+      </van-list>
     </van-tabs>
   </div>
 </template>
@@ -26,24 +33,156 @@ export default {
   data: function() {
     return {
       // tab栏信息
-      // tabList:[]
-      // 测试用
-      tabList: [
-        "军事",
-        "游戏",
-        "娱乐",
-        "新闻",
-        "国内",
-        "国外",
-        "本地",
-        "关注",
-        ">"
-      ],
-      active: 0
+      tabList: [],
+      active: 0,
+      // 加载需要的变量
+      loading: false,
+      finished: false,
+      list: []
     };
+  },
+  watch: {
+    active: function() {
+      // console.log(this.active);
+      // 如果已经有本地文章了就不再请求
+      const category = JSON.parse(localStorage.getItem("category"));
+      this.tabList = category;
+      // 重置页面的加载数据
+      this.loading = this.tabList[this.active].loading;
+      this.finished = this.tabList[this.active].finished;
+      if (this.tabList[this.active].postList.length == 0) {
+        const postData = {
+          url: "/post",
+          params: {
+            pageIndex: this.tabList[this.active].pageIndex,
+            pageSize: 5,
+            category: this.tabList[this.active].id
+          }
+        };
+        // 请求文章列表
+        this.getPosts(postData);
+      } else {
+        this.list = this.tabList[this.active].postList;
+      }
+    }
+    // tabList() {
+    //   console.log(this.tabList);
+    // }
   },
   components: {
     newslist
+  },
+  methods: {
+    // 加载设置
+    onLoad() {
+      // setTimeout(() => {
+      if (this.tabList[this.active].finished) return;
+      // console.log(this.tabList);
+      this.tabList[this.active].pageIndex++;
+      this.$axios({
+        url: "/post",
+        params: {
+          pageIndex: this.tabList[this.active].pageIndex,
+          pageSize: 5,
+          category: this.tabList[this.active].id
+        }
+      }).then(res => {
+        // console.log(res);
+        const { data, total } = res.data;
+        this.tabList[this.active].postList = [
+          ...this.tabList[this.active].postList,
+          ...data
+        ];
+        // 将数据渲染上页面
+        this.list = this.tabList[this.active].postList;
+        // 加载设置为false
+        this.tabList[this.active].loading = false;
+        // 将页面的loading赋值
+        this.loading = this.tabList[this.active].loading;
+        // 如果收到的数据等于总数据的长度，显示没有了
+        if (this.tabList[this.active].postList.length == total)
+          this.tabList[this.active].finished = true;
+        this.finished = this.tabList[this.active].finished;
+      });
+      // }, 100);
+    },
+    // 请求列表信息
+    getCategory(data) {
+      this.$axios(data).then(res => {
+        // console.log(res);
+        const { data } = res.data;
+        this.tabList = data;
+        this.tabList.push({ name: ">" });
+        this.setAtt();
+        localStorage.setItem("category", JSON.stringify(this.tabList));
+      });
+    },
+    // 请求文章列表
+    getPosts(data) {
+      this.$axios(data).then(res => {
+        // console.log(res);
+        this.tabList[this.active].postList = res.data.data;
+        localStorage.setItem("category", JSON.stringify(this.tabList));
+        // 拿出数据给list渲染页面
+        this.list = this.tabList[this.active].postList;
+      });
+    },
+    //给每个tab对象里添加：存储列表新闻的属性
+    setAtt() {
+      this.tabList = this.tabList.map(item => {
+        item.postList = [];
+        item.loading = false;
+        item.finished = false;
+        item.pageIndex = 1;
+        item.scrollTop = 0;
+        return item;
+      });
+    }
+  },
+  mounted: function() {
+    // 获取本地的tab栏数据
+    const category = JSON.parse(localStorage.getItem("category"));
+    // 获取本地用户信息
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    //申请tab数据的对象
+    const tabData = { url: "/category" };
+    // 判断本地有没有列表数据
+    if (category) {
+      // 先判断tab栏数据对不对
+      // 登录，却第一个不显示关注重新请求
+
+      if (
+        (category[0].id == "999" && userInfo) ||
+        (category[0].id == "0" && !userInfo)
+      ) {
+        // 在登录状态传给axios的对象添加请求头
+        if (userInfo) tabData.headers = { Authorization: userInfo.token };
+
+        // 重新申请tab栏
+        this.getCategory(tabData);
+        // 申请新闻列表对象
+        // 因为上面重新请求tab数据需要时间，所以要定时器缓冲一下
+        setTimeout(() => {
+          const postData = {
+            url: "/post",
+            params: { pageSize: 5, category: this.tabList[this.active].id }
+          };
+          if (userInfo) postData.headers = { Authorization: userInfo.token };
+          // 申请数据
+          this.getPosts(postData);
+          return;
+        }, 10);
+      }
+      //  有 直接拿本地的渲染
+      this.tabList = category;
+      this.list = category[this.active].postList;
+    } else {
+      // 申请文章列表的对象
+      const postData = { url: "/post", params: { pageSize: 5, category: 999 } };
+      //没有 向后台申请
+      this.getCategory(tabData);
+      this.getPosts(postData);
+    }
   }
 };
 </script>
