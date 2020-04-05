@@ -45,8 +45,9 @@ export default {
     active: function() {
       // console.log(this.active);
       // 如果已经有本地文章了就不再请求
-      const category = JSON.parse(localStorage.getItem("category"));
-      this.tabList = category;
+      // const category = JSON.parse(localStorage.getItem("category"));
+      // this.tabList = category;
+      // console.log(this.tabList);
       // 重置页面的加载数据
       this.loading = this.tabList[this.active].loading;
       this.finished = this.tabList[this.active].finished;
@@ -75,18 +76,24 @@ export default {
   methods: {
     // 加载设置
     onLoad() {
-      // setTimeout(() => {
       if (this.tabList[this.active].finished) return;
       // console.log(this.tabList);
       this.tabList[this.active].pageIndex++;
-      this.$axios({
+      const postData = {
         url: "/post",
         params: {
           pageIndex: this.tabList[this.active].pageIndex,
           pageSize: 5,
           category: this.tabList[this.active].id
         }
-      }).then(res => {
+      };
+      // 是关注栏请求需要添加请求头
+      if (this.tabList[this.active].id == 0) {
+        // 获取本地用户信息
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        postData.headers = { Authorization: userInfo.token };
+      }
+      this.$axios(postData).then(res => {
         // console.log(res);
         const { data, total } = res.data;
         this.tabList[this.active].postList = [
@@ -104,9 +111,8 @@ export default {
           this.tabList[this.active].finished = true;
         this.finished = this.tabList[this.active].finished;
       });
-      // }, 100);
     },
-    // 请求列表信息
+    // 请求列表信息并保存到本地
     getCategory(data) {
       this.$axios(data).then(res => {
         // console.log(res);
@@ -117,12 +123,11 @@ export default {
         localStorage.setItem("category", JSON.stringify(this.tabList));
       });
     },
-    // 请求文章列表
+    // 请求文章列表并渲染到页面
     getPosts(data) {
       this.$axios(data).then(res => {
         // console.log(res);
         this.tabList[this.active].postList = res.data.data;
-        localStorage.setItem("category", JSON.stringify(this.tabList));
         // 拿出数据给list渲染页面
         this.list = this.tabList[this.active].postList;
       });
@@ -150,7 +155,6 @@ export default {
     if (category) {
       // 先判断tab栏数据对不对
       // 登录，却第一个不显示关注重新请求
-
       if (
         (category[0].id == "999" && userInfo) ||
         (category[0].id == "0" && !userInfo)
@@ -171,11 +175,18 @@ export default {
           // 申请数据
           this.getPosts(postData);
           return;
-        }, 10);
+        }, 100);
       }
       //  有 直接拿本地的渲染
       this.tabList = category;
-      this.list = category[this.active].postList;
+      // 申请页面数据
+      const postData = {
+        url: "/post",
+        params: { pageSize: 5, category: this.tabList[this.active].id }
+      };
+      if (userInfo) postData.headers = { Authorization: userInfo.token };
+      this.getPosts(postData);
+      // this.list = category[this.active].postList;
     } else {
       // 申请文章列表的对象
       const postData = { url: "/post", params: { pageSize: 5, category: 999 } };
