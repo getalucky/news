@@ -60,6 +60,16 @@ const routes = [
     meta: {
       intercept: true
     }
+  },
+  // 栏目管理
+  {
+    path: '/columnsorting',
+    component: () => import('@/views/ColumnSorting'),
+  },
+  // 搜索页
+  {
+    path: '/search',
+    component: () => import('@/views/Search'),
   }
 ]
 

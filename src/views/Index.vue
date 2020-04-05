@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <header class="header">
       <i class="iconfont iconnew"></i>
-      <span>
+      <span @click="$router.push('/search')">
         <i class="iconfont icon-right serach">搜索新闻</i>
       </span>
       <router-link to="/personal">
@@ -12,7 +12,10 @@
     </header>
     <!-- 标签栏 -->
     <van-tabs v-model="active" sticky>
-      <van-tab v-for="(item,index) in tabList" :title="item.name" :key="index"></van-tab>
+      <!-- 显示内容标签 -->
+      <van-tab v-for="(item,index) in tabs" :title="item.name" :key="index"></van-tab>
+      <!-- 最后一个显示箭头 -->
+      <!-- <van-tab title=">" @click="touch"></van-tab> -->
       <van-list
         v-model="loading"
         :finished="finished"
@@ -34,6 +37,8 @@ export default {
     return {
       // tab栏信息
       tabList: [],
+      tabs: [],
+      // 显示点击的tab下标
       active: 0,
       // 加载需要的变量
       loading: false,
@@ -44,10 +49,10 @@ export default {
   watch: {
     active: function() {
       // console.log(this.active);
-      // 如果已经有本地文章了就不再请求
-      // const category = JSON.parse(localStorage.getItem("category"));
-      // this.tabList = category;
-      // console.log(this.tabList);
+      if (this.active == this.tabs.length - 1) {
+        this.$router.push("/columnsorting");
+        return;
+      }
       // 重置页面的加载数据
       this.loading = this.tabList[this.active].loading;
       this.finished = this.tabList[this.active].finished;
@@ -66,8 +71,8 @@ export default {
         this.list = this.tabList[this.active].postList;
       }
     }
-    // tabList() {
-    //   console.log(this.tabList);
+    // tabs() {
+    //   console.log(this.tabs);
     // }
   },
   components: {
@@ -76,7 +81,7 @@ export default {
   methods: {
     // 加载设置
     onLoad() {
-      if (this.tabList[this.active].finished) return;
+      if (this.finished) return;
       // console.log(this.tabList);
       this.tabList[this.active].pageIndex++;
       const postData = {
@@ -118,9 +123,11 @@ export default {
         // console.log(res);
         const { data } = res.data;
         this.tabList = data;
-        this.tabList.push({ name: ">" });
         this.setAtt();
+        this.tabList.push({ name: ">" });
         localStorage.setItem("category", JSON.stringify(this.tabList));
+        // 显示筛选后的tab列表
+        this.getTab();
       });
     },
     // 请求文章列表并渲染到页面
@@ -141,6 +148,12 @@ export default {
         item.pageIndex = 1;
         item.scrollTop = 0;
         return item;
+      });
+    },
+    //提出显示的列表数组
+    getTab() {
+      this.tabs = this.tabList.filter(item => {
+        if (item.is_top == 1 || item.name == ">") return item;
       });
     }
   },
@@ -175,10 +188,11 @@ export default {
           // 申请数据
           this.getPosts(postData);
           return;
-        }, 100);
+        }, 20);
       }
       //  有 直接拿本地的渲染
       this.tabList = category;
+      this.getTab();
       // 申请页面数据
       const postData = {
         url: "/post",
@@ -186,7 +200,6 @@ export default {
       };
       if (userInfo) postData.headers = { Authorization: userInfo.token };
       this.getPosts(postData);
-      // this.list = category[this.active].postList;
     } else {
       // 申请文章列表的对象
       const postData = { url: "/post", params: { pageSize: 5, category: 999 } };
