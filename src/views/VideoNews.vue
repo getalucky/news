@@ -71,12 +71,14 @@ export default {
   mounted: function() {
     this.newsId = this.$route.params.id;
     // 获取本地token
-    const { token } = JSON.parse(localStorage.getItem("userInfo"));
-    this.$axios({
-      url: "/post/" + this.newsId,
-      headers: { Authorization: token }
-    }).then(res => {
-      console.log(res);
+    // 获取本地token
+    const { token } = JSON.parse(localStorage.getItem("userInfo")) || "";
+    let postData = {
+      url: "/post/" + this.newsId
+    };
+    if (token) postData.headers = { Authorization: token };
+    this.$axios(postData).then(res => {
+      // console.log(res);
 
       this.news = res.data.data;
       // 获取关注的状态
@@ -91,7 +93,7 @@ export default {
     // 关注
     follow() {
       // 获取本地token
-      const { token } = JSON.parse(localStorage.getItem("userInfo"));
+      const { token } = JSON.parse(localStorage.getItem("userInfo")) || "";
       if (!this.isfollow) {
         this.$axios({
           url: "/user_follows/" + this.news.user.id,
@@ -117,7 +119,7 @@ export default {
     // 点赞
     like() {
       // 获取本地token
-      const { token } = JSON.parse(localStorage.getItem("userInfo"));
+      const { token } = JSON.parse(localStorage.getItem("userInfo")) || "";
       this.$axios({
         url: "/post_like/" + this.newsId,
         headers: { Authorization: token }

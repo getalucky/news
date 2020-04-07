@@ -26,7 +26,7 @@ export default {
     // 收藏
     starOperation() {
       // 获取本地token
-      const { token } = JSON.parse(localStorage.getItem("userInfo"));
+      const { token } = JSON.parse(localStorage.getItem("userInfo")) || "";
       this.$axios({
         url: "/post_star/" + this.newsId,
         headers: { Authorization: token }
@@ -36,9 +36,10 @@ export default {
       });
     }
   },
-  mounted: function() {
-    console.log(this.isstar);
-    this.star = this.isstar;
+  watch: {
+    isstar: function() {
+      this.star = this.isstar;
+    }
   }
 };
 </script>
@@ -88,7 +89,7 @@ export default {
       }
     }
     .isstar {
-      // color: red;
+      color: red;
     }
   }
 }

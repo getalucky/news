@@ -79,11 +79,12 @@ export default {
     // 获取新闻的id
     const { id } = this.$route.params;
     // 获取本地token
-    const { token } = JSON.parse(localStorage.getItem("userInfo"));
-    this.$axios({
-      url: "/post/" + id,
-      headers: { Authorization: token }
-    }).then(res => {
+    const { token } = JSON.parse(localStorage.getItem("userInfo")) || "";
+    let postData = {
+      url: "/post/" + id
+    };
+    if (token) postData.headers = { Authorization: token };
+    this.$axios(postData).then(res => {
       // console.log(res);
       // 渲染新闻
       this.news = res.data.data;
@@ -103,7 +104,7 @@ export default {
     // 关注
     follow() {
       // 获取本地token
-      const { token } = JSON.parse(localStorage.getItem("userInfo"));
+      const { token } = JSON.parse(localStorage.getItem("userInfo")) || "";
       if (!this.isfollow) {
         this.$axios({
           url: "/user_follows/" + this.authorId,
@@ -129,7 +130,7 @@ export default {
     // 点赞
     like() {
       // 获取本地token
-      const { token } = JSON.parse(localStorage.getItem("userInfo"));
+      const { token } = JSON.parse(localStorage.getItem("userInfo")) || "";
       this.$axios({
         url: "/post_like/" + this.newsId,
         headers: { Authorization: token }
