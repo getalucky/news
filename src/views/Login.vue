@@ -50,10 +50,12 @@ export default {
         const { data } = res.data;
         localStorage.setItem("userInfo", JSON.stringify(data));
         this.$toast(res.data.message);
-        this.$router.push("/personal");
+        const { return_url } = this.$route.query;
+        this.$router.replace(return_url || "/personal");
       });
     }
-  }
+  },
+  mounted: function() {}
 };
 </script>
 

@@ -70,7 +70,17 @@ const routes = [
   {
     path: '/search',
     component: () => import('@/views/Search'),
-  }
+  },
+  // 文字类新闻
+  {
+    path: '/news/:id',
+    component: () => import('@/views/News'),
+  },
+  // 视频新闻内容页
+  {
+    path: '/videoNews/:id',
+    component: () => import('@/views/VideoNews'),
+  },
 ]
 
 const router = new VueRouter({

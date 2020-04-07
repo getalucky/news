@@ -12,6 +12,8 @@ import {
   ActionSheet
 } from 'vant';
 
+// 申明实例对象
+let app;
 
 // 配置axios
 axios.defaults.baseURL = "http://localhost:3000";
@@ -33,8 +35,22 @@ axios.interceptors.response.use(function (response) {
   // 对响应数据做点什么
   return response;
 }, function (error) {
+  // console.log(error.response);
+  const {
+    data
+  } = error.response;
   // 对响应错误做点什么
-  Toast.fail(error.response.data.message);
+  if (data.statusCode === 400) {
+    Toast.fail(data.message);
+  } else if (data.statusCode === 403) {
+    Toast.fail(data.message);
+    app.$router.push({
+      path: '/login',
+      query: {
+        return_url: app.$route.path
+      }
+    });
+  }
   return Promise.reject(error);
 });
 // 注册全局前置守卫
@@ -54,7 +70,7 @@ router.beforeEach((to, from, next) => {
 
 Vue.config.productionTip = false
 
-new Vue({
+app = new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')

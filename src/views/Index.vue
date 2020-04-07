@@ -33,6 +33,7 @@
 import newslist from "@/components/NewsList";
 
 export default {
+  name: "index",
   data: function() {
     return {
       // tab栏信息
