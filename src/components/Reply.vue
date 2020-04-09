@@ -1,6 +1,7 @@
 <template>
   <div class="reply">
-    <input type="text" placeholder="写跟帖" />
+    <!-- <input type="text" placeholder="写跟帖" /> -->
+    <div class="input">写跟帖</div>
     <div>
       <!-- <van-icon name="chat-o" />
       <van-icon name="star-o" />-->
@@ -58,11 +59,14 @@ export default {
   height: 50px;
   padding: 0.694444rem 1.041667rem;
   background: #fff;
-  input {
+  .input {
+    height: 2.083333rem;
     width: 11.805556rem;
     background: #d7d7d7;
     border-radius: 1.041667rem;
+    margin-top: 0;
     padding-left: 0.694444rem;
+    line-height: 2.083333rem;
   }
   div {
     margin-top: 0.902778rem;

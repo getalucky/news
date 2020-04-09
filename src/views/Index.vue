@@ -49,7 +49,7 @@ export default {
   },
   watch: {
     active: function() {
-      // console.log(this.active);
+      // console.log(this.tabList[this.active].id);
       if (this.active == this.tabs.length - 1) {
         this.$router.push("/columnsorting");
         return;
@@ -57,6 +57,7 @@ export default {
       // 重置页面的加载数据
       this.loading = this.tabList[this.active].loading;
       this.finished = this.tabList[this.active].finished;
+      // 判断如果缓存没有这页的数据就请求数据
       if (this.tabList[this.active].postList.length == 0) {
         const postData = {
           url: "/post",
@@ -66,9 +67,16 @@ export default {
             category: this.tabList[this.active].id
           }
         };
+        // 如果是关注页加上请求头
+        if (this.tabList[this.active].id == 0) {
+          // 获取本地用户信息
+          const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+          postData.headers = { Authorization: userInfo.token };
+        }
         // 请求文章列表
         this.getPosts(postData);
       } else {
+        // 有数据拿本地的数据渲染
         this.list = this.tabList[this.active].postList;
       }
     }
@@ -173,6 +181,8 @@ export default {
         (category[0].id == "999" && userInfo) ||
         (category[0].id == "0" && !userInfo)
       ) {
+        console.log(111);
+
         // 在登录状态传给axios的对象添加请求头
         if (userInfo) tabData.headers = { Authorization: userInfo.token };
 
@@ -208,6 +218,65 @@ export default {
       this.getCategory(tabData);
       this.getPosts(postData);
     }
+  },
+  activated: function() {
+    // 获取本地的tab栏数据
+    const category = JSON.parse(localStorage.getItem("category"));
+    // 获取本地用户信息
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    //申请tab数据的对象
+    const tabData = { url: "/category" };
+    // 判断本地有没有列表数据
+    if (category) {
+      // 先判断tab栏数据对不对
+      // 登录，却第一个不显示关注重新请求
+      if (
+        (category[0].id == "999" && userInfo) ||
+        (category[0].id == "0" && !userInfo)
+      ) {
+        // console.log(111);
+
+        // 在登录状态传给axios的对象添加请求头
+        if (userInfo) tabData.headers = { Authorization: userInfo.token };
+
+        // 重新申请tab栏
+        this.getCategory(tabData);
+        setTimeout(() => {
+          // 申请新闻列表对象
+          // 因为上面重新请求tab数据需要时间，所以要定时器缓冲一下
+          const postData = {
+            url: "/post",
+            params: { pageSize: 5, category: this.tabList[this.active].id }
+          };
+          if (userInfo) postData.headers = { Authorization: userInfo.token };
+          // 申请数据
+          this.getPosts(postData);
+          return;
+        }, 50);
+      }
+      //  有 直接拿本地的渲染
+      this.tabList = category;
+      this.getTab();
+      // 申请页面数据
+      const postData = {
+        url: "/post",
+        params: { pageSize: 5, category: this.tabList[this.active].id }
+      };
+      if (userInfo) postData.headers = { Authorization: userInfo.token };
+      this.getPosts(postData);
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    // 需要特别设置的路由
+    let arrURL = ["/personal", "/columnsorting"];
+    next(vm => {
+      if (arrURL.includes(from.path)) {
+        // vm.active = 1;
+        setTimeout(() => {
+          vm.active = 0;
+        }, 100);
+      }
+    });
   }
 };
 </script>
