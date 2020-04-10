@@ -32,7 +32,7 @@
         </div>
       </van-form>
     </div>
-    <i class="iconfont iconicon-test frok"></i>
+    <i class="iconfont iconicon-test frok" @click="$router.replace('/')"></i>
   </div>
 </template>
 

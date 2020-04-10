@@ -234,8 +234,6 @@ export default {
         (category[0].id == "999" && userInfo) ||
         (category[0].id == "0" && !userInfo)
       ) {
-        // console.log(111);
-
         // 在登录状态传给axios的对象添加请求头
         if (userInfo) tabData.headers = { Authorization: userInfo.token };
 
