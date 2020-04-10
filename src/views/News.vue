@@ -30,7 +30,7 @@
         <i class="iconfont icon-weixin"></i>微信
       </span>
     </div>
-    <div class="comments">
+    <!-- <div class="comments">
       <h2>精彩跟帖</h2>
       <div class="acomments">
         <div>
@@ -47,7 +47,7 @@
         </div>
         <p>文章说的很有道理！</p>
       </div>
-    </div>
+    </div>-->
     <reply :newsId="newsId" :news="news" :isstar="isstar"></reply>
   </div>
 </template>

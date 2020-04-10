@@ -1,16 +1,19 @@
 <template>
-  <div class="reply">
-    <!-- <input type="text" placeholder="写跟帖" /> -->
-    <div class="input">写跟帖</div>
-    <div>
-      <!-- <van-icon name="chat-o" />
-      <van-icon name="star-o" />-->
-      <i class="iconfont icon-xinxi">
-        <span>{{news.comment_length}}</span>
-      </i>
-      <i class="iconfont icon-shoucang" :class="star ? 'isstar' : ''" @click="starOperation"></i>
-      <i class="iconfont icon-fenxiang"></i>
+  <div>
+    <div class="reply">
+      <!-- <input type="text" placeholder="写跟帖" /> -->
+      <div class="input" @click="$router.push('/returncard/'+ news.id)">写跟帖</div>
+      <div>
+        <!-- <van-icon name="chat-o" />
+        <van-icon name="star-o" />-->
+        <i class="iconfont icon-xinxi">
+          <span>{{news.comment_length}}</span>
+        </i>
+        <i class="iconfont icon-shoucang" :class="star ? 'isstar' : ''" @click="starOperation"></i>
+        <i class="iconfont icon-fenxiang"></i>
+      </div>
     </div>
+    <div class="floor"></div>
   </div>
 </template>
 
@@ -56,7 +59,7 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 50px;
+  height: 3.472222rem;
   padding: 0.694444rem 1.041667rem;
   background: #fff;
   .input {
@@ -79,16 +82,16 @@ export default {
         font-size: 1.944444rem;
         span {
           position: absolute;
-          right: -8px;
-          top: -4px;
-          width: 28px;
-          height: 15px;
+          right: -0.555556rem;
+          top: -0.277778rem;
+          width: 1.944444rem;
+          height: 1.041667rem;
           text-align: center;
-          line-height: 15px;
+          line-height: 1.041667rem;
           color: #fff;
-          border-radius: 7px;
+          border-radius: 0.486111rem;
           background: red;
-          font-size: 12px;
+          font-size: 0.833333rem;
         }
       }
     }
@@ -96,5 +99,9 @@ export default {
       color: red;
     }
   }
+}
+.floor {
+  width: 100%;
+  height: 3.472222rem;
 }
 </style>

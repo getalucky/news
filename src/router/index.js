@@ -81,6 +81,11 @@ const routes = [
     path: '/videoNews/:id',
     component: () => import('@/views/VideoNews'),
   },
+  // 新闻回帖
+  {
+    path: '/returncard/:id',
+    component: () => import('@/views/ReturnCard'),
+  }
 ]
 
 const router = new VueRouter({
