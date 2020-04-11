@@ -79,7 +79,6 @@ export default {
     if (token) postData.headers = { Authorization: token };
     this.$axios(postData).then(res => {
       // console.log(res);
-
       this.news = res.data.data;
       // 获取关注的状态
       this.isfollow = res.data.data.has_follow;

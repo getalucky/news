@@ -16,7 +16,8 @@ import {
 let app;
 
 // 配置axios
-axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.baseURL = "http://hmtoutiao-api.atlansic.com";
+// axios.defaults.baseURL = "http://localhost:3000";
 // axios.defaults.baseURL = "http://192.168.1.7:3000";
 Vue.prototype.$axios = axios;
 // 配置vant

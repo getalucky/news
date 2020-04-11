@@ -85,9 +85,13 @@ export default {
     };
     if (token) postData.headers = { Authorization: token };
     this.$axios(postData).then(res => {
-      // console.log(res);
       // 渲染新闻
       this.news = res.data.data;
+      // 给文章资源地址加基地址
+      this.news.content = this.news.content.replace(
+        /http:\/\/localhost:3000/gi,
+        this.$axios.defaults.baseURL
+      );
       // 获取作者id
       this.authorId = res.data.data.user.id;
       // 获取文章id
